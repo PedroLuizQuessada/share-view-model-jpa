@@ -95,22 +95,24 @@ public class ClassJpa {
         studentsJpa.add(student);
     }
 
-    public void removeTeacher(UserJpa teacher) {
-        validateTeacher(teacher);
+    public void removeTeacher(UserJpa removeTeacher) {
+        validateTeacher(removeTeacher);
+        if (Objects.isNull(this.teachersJpa))
+            this.teachersJpa = new ArrayList<>();
 
-        if (teachersJpa.stream().noneMatch(teacherJpa -> teacherJpa.getId().equals(teacher.getId())))
+        boolean removed = this.teachersJpa.removeIf(teacherJpa -> teacherJpa.getId().equals(removeTeacher.getId()));
+        if (!removed)
             throw new BadJpaArgumentException("Professor não consta na classe para ser armazenado no banco de dados.");
-
-        teachersJpa.remove(teacher);
     }
 
-    public void removeStudent(UserJpa student) {
-        validateStudent(student);
+    public void removeStudent(UserJpa removeStudent) {
+        validateStudent(removeStudent);
+        if (Objects.isNull(this.studentsJpa))
+            this.studentsJpa = new ArrayList<>();
 
-        if (studentsJpa.stream().noneMatch(studentJpa -> studentJpa.getId().equals(student.getId())))
+        boolean removed = this.studentsJpa.removeIf(studentJpa -> studentJpa.getId().equals(removeStudent.getId()));
+        if (!removed)
             throw new BadJpaArgumentException("Aluno não consta na classe para ser armazenado no banco de dados.");
-
-        studentsJpa.remove(student);
     }
 
     private void validateTeacher(UserJpa teacher) {
