@@ -27,24 +27,24 @@ public class ClassJpa {
 
     @ManyToMany
     @JoinTable(
-            name = "class_students",
-            joinColumns = @JoinColumn(name = "class_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
-    private List<UserJpa> studentsJpa = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
             name = "class_teachers",
             joinColumns = @JoinColumn(name = "class_id"),
             inverseJoinColumns = @JoinColumn(name = "teacher_id")
     )
     private List<UserJpa> teachersJpa = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "class_students",
+            joinColumns = @JoinColumn(name = "class_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private List<UserJpa> studentsJpa = new ArrayList<>();
+
     @Column(name = "start_date", nullable = false)
     private Date startDate;
 
-    public ClassJpa(Long id, CourseJpa courseJpa, List<UserJpa> studentsJpa, List<UserJpa> teachersJpa, Date startDate) {
+    public ClassJpa(Long id, CourseJpa courseJpa, List<UserJpa> teachersJpa, List<UserJpa> studentsJpa, Date startDate) {
         String message = "";
 
         try {
@@ -53,6 +53,12 @@ public class ClassJpa {
         catch (RuntimeException e) {
             message = message + " " + e.getMessage();
         }
+
+        if (!Objects.isNull(teachersJpa))
+            teachersJpa.forEach(this::validateTeacher);
+
+        if (!Objects.isNull(studentsJpa))
+            studentsJpa.forEach(this::validateStudent);
 
         try {
             validateStartDate(startDate);
@@ -66,8 +72,8 @@ public class ClassJpa {
 
         this.id = id;
         this.courseJpa = courseJpa;
-        this.studentsJpa = studentsJpa;
         this.teachersJpa = teachersJpa;
+        this.studentsJpa = studentsJpa;
         this.startDate = startDate;
     }
 
