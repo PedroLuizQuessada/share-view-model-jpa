@@ -101,7 +101,7 @@ public class ClassJpa {
     public void removeStudent(UserJpa student) {
         validateStudent(student);
 
-        if (studentsJpa.stream().anyMatch(studentJpa -> studentJpa.getId().equals(student.getId())))
+        if (studentsJpa.stream().noneMatch(studentJpa -> studentJpa.getId().equals(student.getId())))
             throw new BadJpaArgumentException("Aluno não consta na classe para ser armazenado no banco de dados.");
 
         studentsJpa.remove(student);
