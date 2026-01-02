@@ -1,6 +1,5 @@
 package models;
 
-import enums.UserType;
 import exceptions.BadJpaArgumentException;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -116,13 +115,13 @@ public class ClassJpa {
     }
 
     private void validateTeacher(UserJpa teacher) {
-        if (Objects.isNull(teacher) || !teacher.getUserType().equals(UserType.TEACHER)) {
+        if (Objects.isNull(teacher)) {
             throw new BadJpaArgumentException("Professor inválido a ser adicionado na classe para ser armazenado no banco de dados.");
         }
     }
 
     private void validateStudent(UserJpa student) {
-        if (Objects.isNull(student) || !student.getUserType().equals(UserType.STUDENT)) {
+        if (Objects.isNull(student)) {
             throw new BadJpaArgumentException("Aluno inválido a ser adicionado na classe para ser armazenado no banco de dados.");
         }
     }
